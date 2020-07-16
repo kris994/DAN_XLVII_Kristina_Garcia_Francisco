@@ -12,7 +12,7 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
         public string Direction { get; set; }
         #endregion
 
-        private string[] AllDirections = {"North", "South"};
+        private string[] AllDirections = { "North", "South" };
         /// <summary>
         /// Used for generating random directions
         /// </summary>
@@ -21,7 +21,9 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
         /// Only one vehicle can be created at a time
         /// </summary>
         private static EventWaitHandle vehicleCreating = new AutoResetEvent(true);
+        private static CountdownEvent countdownVehiclesFinished = new CountdownEvent(Program.vehicleAmount);
         public static List<Vehicle> AllVehicles = new List<Vehicle>();
+        public static string currentDirection = "";
 
         public delegate void Notification();
         public event Notification OnNotification;
@@ -50,33 +52,42 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
         {
             Vehicle vehicle = new Vehicle();
             Announcer announcer = new Announcer();
-            BridgeOrder bridge = new BridgeOrder();
 
             string name = "";
             int orederNumber = 0;
             string direction = "";
-            
+
+            // Create each vehicle one by one
             vehicleCreating.WaitOne();
 
             name = Thread.CurrentThread.Name;
             orederNumber = AllVehicles.Count + 1;
-           
+
             int vehicleDirection = rng.Next(0, 2);
             direction = AllDirections[vehicleDirection];
 
             vehicle = new Vehicle(name, orederNumber, direction);
             AllVehicles.Add(vehicle);
 
-            vehicleCreating.Set();
-
             // Notify the annauncer when all vehicles were created
-            if(AllVehicles.Count == Program.vehicleAmount)
+            if (AllVehicles.Count == Program.vehicleAmount)
             {
                 OnNotification = announcer.VehiclePassingMessage;
                 Notify();
             }
 
-            bridge.BridgePass();
+            // Signal when the vehicle finished creating
+            countdownVehiclesFinished.Signal();
+
+            vehicleCreating.Set();
+            // Let one by one vehicle enter the bridge, but the first can immediately pass
+            BridgeOrder.nextVehicle.WaitOne();
+            countdownVehiclesFinished.Wait();
+
+            BridgeOrder bridge = new BridgeOrder();
+
+            // Once all vehicles finished creating, they can pass the bridge         
+            bridge.BridgePass(direction, orederNumber);
         }
     }
 }
