@@ -23,7 +23,9 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
         private static EventWaitHandle vehicleCreating = new AutoResetEvent(true);
         private static CountdownEvent countdownVehiclesFinished = new CountdownEvent(Program.vehicleAmount);
         public static List<Vehicle> AllVehicles = new List<Vehicle>();
-        public static string currentDirection = "";
+
+        private static EventWaitHandle correctOrder = new AutoResetEvent(true);
+        
 
         public delegate void Notification();
         public event Notification OnNotification;
@@ -76,16 +78,18 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
                 Notify();
             }
 
+            // Making sure threads get correctly queued (their order) in the nextVehicle wait handle
+            Thread.Sleep(15);
             // Signal when the vehicle finished creating
             countdownVehiclesFinished.Signal();
 
             vehicleCreating.Set();
             // Let one by one vehicle enter the bridge, but the first can immediately pass
             BridgeOrder.nextVehicle.WaitOne();
+
             countdownVehiclesFinished.Wait();
 
             BridgeOrder bridge = new BridgeOrder();
-
             // Once all vehicles finished creating, they can pass the bridge         
             bridge.BridgePass(direction, orederNumber);
         }

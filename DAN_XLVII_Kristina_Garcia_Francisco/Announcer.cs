@@ -16,6 +16,11 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
             for (int i = 0; i < allVehicles.Count; i++)
             {
                 Console.WriteLine("Vehicle order: {0}, Vehicle direction: {1}", allVehicles[i].OrderNumber, allVehicles[i].Direction);
+
+                if (i == allVehicles.Count - 1)
+                {
+                    Console.WriteLine();
+                }
             }
         }
     }
