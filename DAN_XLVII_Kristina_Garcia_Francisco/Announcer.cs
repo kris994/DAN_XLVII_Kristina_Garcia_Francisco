@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAN_XLVII_Kristina_Garcia_Francisco
 {
+    /// <summary>
+    /// Notifies the user of changes in the application
+    /// </summary>
     class Announcer
     {
+        /// <summary>
+        /// Notifies the user when all vehicles are ready to pass the bridge, their total number, position and direction
+        /// </summary>
         public void VehiclePassingMessage()
         {
             List<Vehicle> allVehicles = Vehicle.AllVehicles.ToList();

@@ -5,11 +5,24 @@ using System.Threading;
 
 namespace DAN_XLVII_Kristina_Garcia_Francisco
 {
+    /// <summary>
+    /// The main program class
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// Creates a random vehicle amount
+        /// </summary>
         public static int vehicleAmount = 0;
+        /// <summary>
+        /// Counts the time that passes in the application
+        /// </summary>
         public static Stopwatch stopWatch = new Stopwatch();
 
+        /// <summary>
+        /// The main method that starts all threads
+        /// </summary>
+        /// <param name="args">main arguments</param>
         static void Main(string[] args)
         {           
             stopWatch.Start();

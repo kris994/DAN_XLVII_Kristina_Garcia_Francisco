@@ -12,24 +12,36 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
         public string Direction { get; set; }
         #endregion
 
+        /// <summary>
+        /// The types of directions a vehicle can take
+        /// </summary>
         private string[] AllDirections = { "North", "South" };
         /// <summary>
         /// Used for generating random directions
         /// </summary>
         private Random rng = new Random();
         /// <summary>
-        /// Only one vehicle can be created at a time
+        /// Only one vehicle can be created at a time to ensure the correct data is preserved
         /// </summary>
         private static EventWaitHandle vehicleCreating = new AutoResetEvent(true);
+        /// <summary>
+        /// Counts down until all vehicles were created before letting them pass the bridge
+        /// </summary>
         private static CountdownEvent countdownVehiclesFinished = new CountdownEvent(Program.vehicleAmount);
+        /// <summary>
+        /// List of all created vehicles
+        /// </summary>
         public static List<Vehicle> AllVehicles = new List<Vehicle>();
-
-        private static EventWaitHandle correctOrder = new AutoResetEvent(true);
-        
-
+        /// <summary>
+        /// Delegate used to send store notifications when triggered
+        /// </summary>
         public delegate void Notification();
+        /// <summary>
+        /// Event that gets triggered when the total amount of vehicleAmount was created
+        /// </summary>
         public event Notification OnNotification;
 
+        #region Constructor
         public Vehicle(string name, int orderNumber, string direction)
         {
             Name = name;
@@ -41,7 +53,9 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
         {
 
         }
+        #endregion
 
+        // Run all active notifications
         internal void Notify()
         {
             if (OnNotification != null)
@@ -50,6 +64,7 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
             }
         }
 
+        // Creates a vehicle and sends it to the bridge when all are ready
         public void CreateVehicle()
         {
             Vehicle vehicle = new Vehicle();
