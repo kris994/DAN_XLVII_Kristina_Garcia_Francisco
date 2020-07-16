@@ -23,6 +23,7 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
 
         public void BridgePass(string vehicleDirection, int order)
         {
+            ApplicationTime time = new ApplicationTime();
             // Only one veichle at a time can set the direction depending on their order
             waitingDirection.WaitOne();
 
@@ -38,6 +39,8 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
                 nextVehicle.Set();
                 // Time it takes for the vehicle to pass the bridge
                 Thread.Sleep(500);
+
+                time.ApplicationTotalRunningTime(order);
             }
             // Vehicle with same direction as current bridge direction and it is not the first vehicle
             else if (currentDirection == vehicleDirection)
@@ -49,12 +52,7 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
                 // Time it takes for the vehicle to pass the bridge
                 Thread.Sleep(500);
 
-                // Claculate the application end time once all vehicles pass
-                if (order == Vehicle.AllVehicles.Count)
-                {
-                    ApplicationTime time = new ApplicationTime();
-                    time.ApplicationTotalRunningTime();
-                }
+                time.ApplicationTotalRunningTime(order);
             }
             else
             {

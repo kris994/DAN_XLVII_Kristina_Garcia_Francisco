@@ -28,9 +28,7 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
             stopWatch.Start();
 
             Random rng = new Random();
-            vehicleAmount = rng.Next(1, 16);
-            
-            List<Thread> allVehicleThreads = new List<Thread>();
+            vehicleAmount = rng.Next(1, 16);          
             Vehicle vehicle = new Vehicle();
 
             // Create all threads
@@ -40,13 +38,7 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
                 {
                     Name = "Vehicle_" + i
                 };
-                allVehicleThreads.Add(vehicleThread);
-            }
-
-            // Start all threads at the same time
-            foreach (var item in allVehicleThreads)
-            {
-                item.Start();
+                vehicleThread.Start();
             }
 
             Console.ReadKey();

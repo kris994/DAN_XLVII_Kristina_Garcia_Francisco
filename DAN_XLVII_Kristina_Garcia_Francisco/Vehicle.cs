@@ -101,7 +101,6 @@ namespace DAN_XLVII_Kristina_Garcia_Francisco
             vehicleCreating.Set();
             // Let one by one vehicle enter the bridge, but the first can immediately pass
             BridgeOrder.nextVehicle.WaitOne();
-
             countdownVehiclesFinished.Wait();
 
             BridgeOrder bridge = new BridgeOrder();
